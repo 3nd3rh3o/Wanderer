@@ -22,6 +22,7 @@ public class PlanetDataHolder
         }
     }
     [SerializeField]
+    [Range(50, 200)]
     private float radius;
     public float Radius
     {
@@ -35,16 +36,54 @@ public class PlanetDataHolder
             OnChange?.Invoke();
         }
     }
-
-    /* public static TAGS[] GetTAGS(this FEATURES feature)
+    [SerializeField]
+    private MODIFIERS[] globalModifiers = new MODIFIERS[0];
+    public MODIFIERS[] GlobalModifiers
     {
-        return feature switch{
-            FEATURES.OCEAN => new TAGS[]{},
-            FEATURES.MOUNTAINS => new TAGS[]{},
-            FEATURES.CRATERS => new TAGS[]{},
-            FEATURES.L_MOUNTAINS_VALLEYS => new TAGS[]{}
-        };
-    } */
+        get
+        {
+            return globalModifiers;
+        }
+        set
+        {
+            globalModifiers = value;
+        }
+    }
+
+    [SerializeField]
+    public Vector4 mParams10;
+    [SerializeField]
+    public Vector4 mParams11;
+    [SerializeField]
+    public Vector4 mParams20;
+    [SerializeField]
+    public Vector4 mParams21;
+    [SerializeField]
+    public Vector4 mParams30;
+    [SerializeField]
+    public Vector4 mParams31;
+
+
+
+    public enum MODIFIERS
+    {
+        NONE,
+        SIMPLENOISE
+    }
+    private static int nModifier = 2; // number of possible values for a modifier
+
+
+    public static int ToInstr(MODIFIERS[] m)
+    {
+        int res = 0;
+        int i = 0;
+        foreach (MODIFIERS mod in m)
+        {
+            res+= (int)(((int)mod)*Mathf.Pow(nModifier, i));
+            i++;
+        }
+        return res;
+    }
 
 
     /* 

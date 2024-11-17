@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 
@@ -54,9 +55,14 @@ public class RaymarchCamera : SceneViewFilter
     public int _AoIterations;
     public int _MaxPlanets = 10;
     public UniverseDataHolder _dataHolder = new();
+
+    private Vector2 _playerLook;
+    public InputActionReference _MOUSE;
+    public Vector3 _playerPos = new();
+    public InputActionReference _MOVE;
     
     private List<Vector4[]> _planetBuffer;
-
+ 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         if (!_rayMarchMaterial)
@@ -65,8 +71,18 @@ public class RaymarchCamera : SceneViewFilter
             return;
         }
         UpdateShaderBuffer();
-
-
+        if (_MOUSE && _cam)
+        {
+            _playerLook = _MOUSE.action.ReadValue<Vector2>();
+            _cam.transform.localRotation *= Quaternion.Euler(_playerLook.y * -0.1f, _playerLook.x * 0.1f, 0);
+            _cam.transform.localRotation = _cam.transform.localRotation.normalized;
+            if (_MOVE)
+            {
+                Vector2 movement = _MOVE.action.ReadValue<Vector2>();
+                _playerPos = (_playerPos +(_cam.transform.localRotation * new Vector3(movement.x, 0, movement.y)*1f));
+            }
+        }
+        
         _rayMarchMaterial.SetMatrix("_CamFrustum", CamFrustum(_camera));
         _rayMarchMaterial.SetMatrix("_CamToWorld", _camera.cameraToWorldMatrix);
         _rayMarchMaterial.SetFloat("_minDistance", _Distance.x);
@@ -85,7 +101,13 @@ public class RaymarchCamera : SceneViewFilter
         _rayMarchMaterial.SetInt("_NumPlanets",_dataHolder.NumElem());
 
         _rayMarchMat.SetVectorArray("_planetPR", _planetBuffer[0]);
-
+        _rayMarchMat.SetVectorArray("_planetMinstr", _planetBuffer[1]);
+        _rayMarchMat.SetVectorArray("_planetM10", _planetBuffer[2]);
+        _rayMarchMat.SetVectorArray("_planetM11", _planetBuffer[3]);
+        _rayMarchMat.SetVectorArray("_planetM20", _planetBuffer[4]);
+        _rayMarchMat.SetVectorArray("_planetM21", _planetBuffer[5]);
+        _rayMarchMat.SetVectorArray("_planetM30", _planetBuffer[6]);
+        _rayMarchMat.SetVectorArray("_planetM31", _planetBuffer[7]);
 
         RenderTexture.active = destination;
         _rayMarchMaterial.SetTexture("_MainTex", source);
@@ -142,7 +164,7 @@ public class RaymarchCamera : SceneViewFilter
 
     private void OnEnable()
     {
-        _planetBuffer = new(){new Vector4[256]};
+        _planetBuffer = new(){new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256]};
         _dataHolder.HookInit();
         // CREATE BUFFER
         UpdateShaderBuffer();
@@ -157,15 +179,35 @@ public class RaymarchCamera : SceneViewFilter
 
     private void UpdateShaderBuffer()
     {
-        List<Tuple<Vector3, float>> pData = _dataHolder.GetData();
-        Vector4[] pos = new Vector4[256];   
+        List<Vector4>[] pData = _dataHolder.GetData();
+        Vector4[] pos = new Vector4[256];
+        Vector4[] modifiers = new Vector4[256];
+        Vector4[] mArgs10 = new Vector4[256];
+        Vector4[] mArgs11 = new Vector4[256];
+        Vector4[] mArgs20 = new Vector4[256];
+        Vector4[] mArgs21 = new Vector4[256];
+        Vector4[] mArgs30 = new Vector4[256];
+        Vector4[] mArgs31 = new Vector4[256];
         for (int i = 0; i < _dataHolder.NumElem(); i++)
         {
-            Vector3 position = pData[i].Item1;
-            float radius = pData[i].Item2;
-            pos[i] = new Vector4(position.x, position.y, position.z, radius);
+            Vector4 pr = pData[i][0];
+            pos[i] = new Vector4(pr.x - _playerPos.x, pr.y - _playerPos.y, pr.z - _playerPos.z, pr.w);
+            modifiers[i] = new Vector4(pData[i][1].x, 0, 0, 0);
+            mArgs10[i] = pData[i][2];
+            mArgs11[i] = pData[i][3];
+            mArgs20[i] = pData[i][4];
+            mArgs21[i] = pData[i][5];
+            mArgs30[i] = pData[i][6];
+            mArgs31[i] = pData[i][7];
         }
         _planetBuffer[0] = pos;
+        _planetBuffer[1] = modifiers;
+        _planetBuffer[2] = mArgs10;
+        _planetBuffer[3] = mArgs11;
+        _planetBuffer[4] = mArgs20;
+        _planetBuffer[5] = mArgs21;
+        _planetBuffer[6] = mArgs30;
+        _planetBuffer[7] = mArgs31;
         _dataHolder.UnmarkDirty();
     }
 }

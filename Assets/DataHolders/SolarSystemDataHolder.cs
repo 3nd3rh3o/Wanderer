@@ -27,13 +27,28 @@ public class SolarSystemDataHolder
     public List<PlanetDataHolder> planets = new(10); 
 
 
-    public List<Tuple<Vector3, float>> GetData()
+    public List<Vector4>[] GetData()
     {
-        List<Tuple<Vector3, float>> pData = new (NumElem());
-        planets.ForEach(p => 
+        List<Vector4>[] pData = new List<Vector4>[NumElem()];
+        for (int i = 0; i < NumElem(); i++)
         {
-            pData.Add(new(p.BasePosition+BasePosition, p.Radius));
-        });
+            Vector3 pos = planets[i].BasePosition + BasePosition;
+
+
+
+            pData[i] = new()
+            {
+                new Vector4(pos.x, pos.y, pos.z, planets[i].Radius), 
+                new Vector4(PlanetDataHolder.ToInstr(planets[i].GlobalModifiers), 0, 0, 0),
+                planets[i].mParams10,
+                planets[i].mParams11,
+                planets[i].mParams20,
+                planets[i].mParams21,
+                planets[i].mParams30,
+                planets[i].mParams31
+            };
+
+        }
         return pData;
     }
 

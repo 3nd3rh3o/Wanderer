@@ -4,6 +4,9 @@
         <ui:Foldout text="General" value="false">
             <uie:PropertyField binding-path="_shader" label="Shader" name="shader" />
             <uie:PropertyField name="maxPlanets" binding-path="_MaxPlanets" label="Max planets" />
+            <uie:PropertyField binding-path="_MOUSE" label="mouse" name="mouse" />
+            <uie:PropertyField name="move" binding-path="_MOVE" label="move" />
+            <uie:PropertyField name="playerPos" binding-path="_playerPos" label="player position" />
             <uie:PropertyField name="Distance" label="Distance" binding-path="_Distance" />
             <uie:PropertyField name="maxIterations" binding-path="_MaxIteration" label="Max iterations" />
             <uie:PropertyField name="Accuracy" binding-path="_Accuracy" label="Accuracy" />

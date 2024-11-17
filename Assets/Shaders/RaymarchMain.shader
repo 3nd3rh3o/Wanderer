@@ -20,6 +20,7 @@ Shader "Hiddend/RaymarchMain"
 
             #include "UnityCG.cginc"
             #include "DistanceFunctions.cginc"
+            #include "FractalNoise.cginc"
 
             // how to draw
             sampler2D _MainTex;
@@ -38,6 +39,13 @@ Shader "Hiddend/RaymarchMain"
             
             // COMMON
             fixed4 _planetPR[256];
+            fixed4 _planetMinstr[256];
+            fixed4 _planetM10[256];
+            fixed4 _planetM11[256];
+            fixed4 _planetM20[256];
+            fixed4 _planetM21[256];
+            fixed4 _planetM30[256];
+            fixed4 _planetM31[256];
             uniform int _NumPlanets;
 
 
@@ -76,30 +84,52 @@ Shader "Hiddend/RaymarchMain"
                 return d1.x < d2.x ? d1 : d2;
             }
 
+            float3 unPackModifiers(int mm)
+            {
+                float base = 2;
+                float a = floor(mm/pow(base, 2));
+                float b = floor((mm-(a*pow(base, 2)))/pow(base, 1));
+                float c = floor((mm-(a*pow(base, 2))-(b*pow(base, 1)))/pow(base, 0));
+                return float3(c,b,a);
+            }
+
+            float2 getD(float3 p, int i)
+            {
+                fixed4 pPR = _planetPR[i];
+                float3 mm = unPackModifiers((int)_planetMinstr[i].r);
+                float d = sdSphere(p - pPR.rgb, pPR.a);
+                //TODO switch logic here
+                if (mm.x == 1)
+                {
+                    d += _planetM10[i].r + simpleNoise(normalize(p - pPR.rgb), _planetM10[i].g, _planetM10[i].b);
+                }
+                return float2(d, mm.x);
+
+            }
+
+            float3 GetCol(float3 p, float3 n, int col)
+            {
+                if (col == 1)
+                {
+                    return float3(1, 1, 1);
+                }
+                return n;
+            }
+           
+
             
             float2 map(float3 p)
             {
-                // s = 10000
-                //scale(x)=Si(x>s, -0.5 x+1.5 s, s)- s + 1
-                //tdst(x)=Si(x>s, -1 x+2 s, s)
-                //if star cap min scale, draw between [s; s+5] if p >= 10005 and star_r = 600 scaled star should be 60 and star center => in same direction than before but at a dist 100005
-                //else don't draw if scale<=0 
-                // nothing is drawned after s+5
-
-
-
-                //return a map of distance => behaviour(int);
                 if (_NumPlanets == 0)
                 {
                     return float2(0, 0);
                 }
-                fixed4 pPR = _planetPR[0];
-                float2 res = float2(sdSphere(p - pPR.rgb, pPR.a), 0);
+                
+                float2 res = getD(p, 0);
                 
                 for (int i = 1; i < _NumPlanets; i++)
                 {
-                    pPR = _planetPR[i];
-                    res = opU(res, float2(sdSphere(p - pPR.rgb, pPR.a), 0));
+                    res = opU(res, getD(p, i));
                 }
                 return res;
             }
@@ -108,7 +138,7 @@ Shader "Hiddend/RaymarchMain"
 
             float3 getNormal(float3 p)
             {
-                const float2 offset = float2(0.001, 0.0);
+                const float2 offset = float2(0.01, 0.0);
                 float3 n = float3(
                     map(p + offset.xyy).x - map(p - offset.xyy).x,
                     map(p + offset.yxy).x - map(p - offset.yxy).x,
@@ -116,9 +146,6 @@ Shader "Hiddend/RaymarchMain"
                 );
                 return normalize(n);
             }
-
-
-
 
             float softShadows(float3 ro, float3 rd, float mint, float maxt, float k)
             {
@@ -149,10 +176,7 @@ Shader "Hiddend/RaymarchMain"
                 return (1.0 - ao * _AoIntensity);
             }
 
-            float3 GetCol(float3 p, float3 n, int col)
-            {
-                return n;
-            }
+            
 
             float3 Shading(float3 p, float3 n, int col)
             {

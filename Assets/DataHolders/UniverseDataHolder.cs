@@ -12,10 +12,19 @@ public class UniverseDataHolder
     [SerializeField]
     public List<SolarSystemDataHolder> solarSystems = new(10);
 
-    public List<Tuple<Vector3, float>> GetData()
+    public List<Vector4>[] GetData()
     {
-        List<Tuple<Vector3, float>> pData = new(NumElem());
-        solarSystems.ForEach(s => pData.AddRange(s.GetData()));
+        List<Vector4>[] pData = new List<Vector4>[NumElem()];
+        int l = 0;
+        for (int s = 0; s < solarSystems.Count; s++)
+        {
+            List<Vector4>[] pDatas = solarSystems[s].GetData();
+            for (int p = 0; p < pDatas.Length; p++)
+            {
+                pData[l] = pDatas[p];
+                l++;
+            }
+        }
         return pData;
     }
 
