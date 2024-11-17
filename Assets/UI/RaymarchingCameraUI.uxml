@@ -1,0 +1,28 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="Root" style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Raymarching settings" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+        <ui:Foldout text="General" value="false">
+            <uie:PropertyField binding-path="_shader" label="Shader" name="shader" />
+            <uie:PropertyField name="maxPlanets" binding-path="_MaxPlanets" label="Max planets" />
+            <uie:PropertyField name="Distance" label="Distance" binding-path="_Distance" />
+            <uie:PropertyField name="maxIterations" binding-path="_MaxIteration" label="Max iterations" />
+            <uie:PropertyField name="Accuracy" binding-path="_Accuracy" label="Accuracy" />
+            <ui:Foldout text="Light" name="Light" value="false">
+                <uie:PropertyField label="light color" binding-path="_lightCol" name="lightCol" />
+                <uie:PropertyField name="lightIntensity" binding-path="_lightIntensity" label="Light intensity" />
+                <uie:PropertyField name="starPosition" binding-path="_StarPosition" label="Star position" />
+            </ui:Foldout>
+            <ui:Foldout text="Shadow" name="Shadow" value="false">
+                <uie:PropertyField name="ShadowPenumbra" binding-path="_ShadowPenumbra" label="Shadow penumbra" />
+                <uie:PropertyField name="ShadowIntensity" binding-path="_ShadowIntensity" label="Shadow intensity" />
+                <uie:PropertyField name="ShadowDistance" binding-path="_ShadowDistance" label="Shadow distance" />
+            </ui:Foldout>
+            <ui:Foldout text="Ambient Occlusion" name="AmbientOcclusion" value="false">
+                <uie:PropertyField name="_AoStepSize" binding-path="_AoStepSize" label="Step size" />
+                <uie:PropertyField name="_AoIntensity" binding-path="_AoIntensity" label="Intensity" />
+                <uie:PropertyField name="_AoIterations" binding-path="_AoIterations" label="Iterations" />
+            </ui:Foldout>
+        </ui:Foldout>
+        <uie:PropertyField binding-path="_dataHolder" label="Universe Container" />
+    </ui:VisualElement>
+</ui:UXML>
