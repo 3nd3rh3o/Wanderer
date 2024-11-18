@@ -159,7 +159,7 @@ Camera:
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 1
+  m_FOVAxisMode: 0
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
@@ -177,9 +177,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 1
   far clip plane: 1000000
-  field of view: 17.698141
+  field of view: 27
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -221,39 +221,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47cf6189a80ac6948a75abfa1adcfeb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 490d5fdbd3575af4796fd0b50f58fadf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shader: {fileID: 4800000, guid: 1b228f6ddaa7a9140ad50fe6d4edac9d, type: 3}
-  _Distance: {x: 0, y: 10000}
-  _MaxIteration: 766
-  _Accuracy: 0.001
+  _shader: {fileID: 4800000, guid: 0ab91c2fd6607d04988836d75262aa75, type: 3}
+  _Distance: {x: 0, y: 201.1}
+  _MaxIteration: 64
+  _Accuracy: 0.34
   _lightCol: {r: 1, g: 1, b: 1, a: 1}
-  _StarPosition: {x: 0, y: 0, z: -210.9}
-  _lightIntensity: 1.04
-  _ShadowPenumbra: 0.8
-  _ShadowIntensity: 4.29
-  _ShadowDistance: {x: 120.7, y: 2995}
-  _AoStepSize: 1.11
-  _AoIntensity: 0.47
-  _AoIterations: 0
+  _StarPosition: {x: 0, y: 0, z: 0}
+  _lightIntensity: 1
+  _ShadowPenumbra: 2
+  _ShadowIntensity: 1
+  _ShadowDistance: {x: 0.96, y: 50.8}
+  _AoStepSize: 1.12
+  _AoIntensity: 0.5
+  _AoIterations: 3
   _MaxPlanets: 256
   _dataHolder:
     solarSystems:
     - basePosition: {x: 0, y: 0, z: 0}
       planets:
-      - basePosition: {x: 0, y: 0, z: 511}
-        radius: 100
+      - basePosition: {x: 0, y: 0, z: 166.2}
+        radius: 50
         globalModifiers: 01000000
-        mParams10: {x: 11.91, y: 0.64, z: 10.85, w: 0}
+        mParams10: {x: 26.3, y: 3.23, z: 0.5, w: 0}
         mParams11: {x: 0, y: 0, z: 0, w: 0}
         mParams20: {x: 0, y: 0, z: 0, w: 0}
         mParams21: {x: 0, y: 0, z: 0, w: 0}
         mParams30: {x: 0, y: 0, z: 0, w: 0}
         mParams31: {x: 0, y: 0, z: 0, w: 0}
-  _MOUSE: {fileID: 6283500751527008421, guid: 5cc2555199340bb4f8469356f9bbf98e, type: 3}
+  _MOUSE: {fileID: 6283500751527008421, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}
   _playerPos: {x: 0, y: 0, z: 0}
-  _MOVE: {fileID: -4568195256813560329, guid: 5cc2555199340bb4f8469356f9bbf98e, type: 3}
+  _MOVE: {fileID: -4568195256813560329, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -178,14 +178,14 @@ public class RaymarchCamera : SceneViewFilter
     private void UpdateShaderBuffer()
     {
         List<Vector4>[] pData = _dataHolder.GetData();
-        Vector4[] pos = new Vector4[256];
-        Vector4[] modifiers = new Vector4[256];
-        Vector4[] mArgs10 = new Vector4[256];
-        Vector4[] mArgs11 = new Vector4[256];
-        Vector4[] mArgs20 = new Vector4[256];
-        Vector4[] mArgs21 = new Vector4[256];
-        Vector4[] mArgs30 = new Vector4[256];
-        Vector4[] mArgs31 = new Vector4[256];
+        Vector4[] pos = _planetBuffer[0];
+        Vector4[] modifiers = _planetBuffer[1];
+        Vector4[] mArgs10 = _planetBuffer[2];
+        Vector4[] mArgs11 = _planetBuffer[3];
+        Vector4[] mArgs20 = _planetBuffer[4];
+        Vector4[] mArgs21 = _planetBuffer[5];
+        Vector4[] mArgs30 = _planetBuffer[6];
+        Vector4[] mArgs31 = _planetBuffer[7];
         for (int i = 0; i < _dataHolder.NumElem(); i++)
         {
             Vector4 pr = pData[i][0];
