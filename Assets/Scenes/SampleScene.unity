@@ -226,14 +226,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shader: {fileID: 4800000, guid: 1b228f6ddaa7a9140ad50fe6d4edac9d, type: 3}
   _Distance: {x: 0, y: 10000}
-  _MaxIteration: 640
+  _MaxIteration: 766
   _Accuracy: 0.001
   _lightCol: {r: 1, g: 1, b: 1, a: 1}
   _StarPosition: {x: 0, y: 0, z: -210.9}
   _lightIntensity: 1.04
   _ShadowPenumbra: 0.8
   _ShadowIntensity: 4.29
-  _ShadowDistance: {x: 120.7, y: 5000}
+  _ShadowDistance: {x: 120.7, y: 2995}
   _AoStepSize: 1.11
   _AoIntensity: 0.47
   _AoIterations: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
       - basePosition: {x: 0, y: 0, z: 511}
         radius: 100
         globalModifiers: 01000000
-        mParams10: {x: 11.91, y: 1.6, z: 5.29, w: 0}
+        mParams10: {x: 11.91, y: 0.64, z: 10.85, w: 0}
         mParams11: {x: 0, y: 0, z: 0, w: 0}
         mParams20: {x: 0, y: 0, z: 0, w: 0}
         mParams21: {x: 0, y: 0, z: 0, w: 0}
