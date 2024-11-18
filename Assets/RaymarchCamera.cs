@@ -89,7 +89,7 @@ public class RaymarchCamera : SceneViewFilter
         _rayMarchMaterial.SetInt("_MaxIteration", _MaxIteration);
         _rayMarchMaterial.SetFloat("_Accuracy", _Accuracy);
         _rayMarchMaterial.SetColor("_lightCol", _lightCol);
-        _rayMarchMaterial.SetVector("_lightOrigin", _StarPosition);
+        _rayMarchMaterial.SetVector("_lightOrigin", _StarPosition - _playerPos);
         _rayMarchMaterial.SetFloat("_lightIntensity", _lightIntensity);
         _rayMarchMaterial.SetFloat("_ShadowPenumbra", _ShadowPenumbra);
         _rayMarchMaterial.SetFloat("_ShadowIntensity", _ShadowIntensity);
@@ -193,7 +193,7 @@ public class RaymarchCamera : SceneViewFilter
         {
             Vector4 pr = pData[i][0];
             pos[i] = new Vector4(pr.x - _playerPos.x, pr.y - _playerPos.y, pr.z - _playerPos.z, pr.w);
-            modifiers[i] = new Vector4(pData[i][1].x, 0, 0, 0);
+            modifiers[i] = pData[i][1];
             mArgs10[i] = pData[i][2];
             mArgs11[i] = pData[i][3];
             mArgs20[i] = pData[i][4];

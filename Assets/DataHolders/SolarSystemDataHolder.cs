@@ -33,13 +33,13 @@ public class SolarSystemDataHolder
         for (int i = 0; i < NumElem(); i++)
         {
             Vector3 pos = planets[i].BasePosition + BasePosition;
-
+            Vector3 lDir = (planets[i].BasePosition - BasePosition).normalized;
 
 
             pData[i] = new()
             {
                 new Vector4(pos.x, pos.y, pos.z, planets[i].Radius), 
-                new Vector4(PlanetDataHolder.ToInstr(planets[i].GlobalModifiers), 0, 0, 0),
+                new Vector4(PlanetDataHolder.ToInstr(planets[i].GlobalModifiers), lDir.x, lDir.y, lDir.z),
                 planets[i].mParams10,
                 planets[i].mParams11,
                 planets[i].mParams20,

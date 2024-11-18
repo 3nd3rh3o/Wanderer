@@ -80,7 +80,7 @@ Shader "Hiddend/RaymarchMain"
                 return o;
             }
 
-            float2 opU(float2 d1, float2 d2)
+            float3 opU(float3 d1, float3 d2)
             {
                 return d1.x < d2.x ? d1 : d2;
             }
@@ -94,23 +94,26 @@ Shader "Hiddend/RaymarchMain"
                 return float3(c,b,a);
             }
 
-            float2 getD(float3 p, int i)
+            float getD(float3 p, int i, int modif, fixed4 arg0, fixed4 arg1)
             {
-                fixed4 pPR = _planetPR[i];
-                float3 mm = unPackModifiers((int)_planetMinstr[i].r);
-                float d = sdSphere(p - pPR.rgb, pPR.a);
+                
                 //TODO switch logic here
-                if (mm.x == 1)
+                if (modif == 1)
                 {
-                    d += _planetM10[i].r + simpleNoise(normalize(p - pPR.rgb), _planetM10[i].g, _planetM10[i].b);
-                }
-                return float2(d, mm.x);
+                    fixed4 pPR = _planetPR[i];
+                    return arg0.r + simpleNoise(normalize(p - pPR.rgb), arg0.g, arg0.b);
+                } 
+                else if (modif == 2)
+                {
 
+                }
+                return 0;
             }
 
             float3 GetCol(float3 p, float3 n, int col)
             {
-                if (col == 1)
+                float3 c = unPackModifiers(col);
+                if (c.z == 0)
                 {
                     return float3(1, 1, 1);
                 }
@@ -119,18 +122,20 @@ Shader "Hiddend/RaymarchMain"
            
 
             
-            float2 map(float3 p)
+            float3 map(float3 p)
             {
                 if (_NumPlanets == 0)
                 {
-                    return float2(0, 0);
+                    return float3(0, 0, 0);
                 }
-                
-                float2 res = getD(p, 0);
-                
+                float3 mm = unPackModifiers((int)_planetMinstr[0].r);
+                fixed4 pPR = _planetPR[0];
+                float3 res = float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p, 0, (int)mm.x, _planetM10[0], _planetM11[0]) + getD(p, 0, (int)mm.y, _planetM20[0], _planetM21[0]) + getD(p, 0, (int)mm.z, _planetM30[0], _planetM31[0]), _planetMinstr[0].r, 0);
                 for (int i = 1; i < _NumPlanets; i++)
                 {
-                    res = opU(res, getD(p, i));
+                    mm = unPackModifiers((int)_planetMinstr[i].r);
+                    pPR = _planetPR[i];
+                    res = opU(res, float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p, i, (int)mm.x, _planetM10[i], _planetM11[i]) + getD(p, i, (int)mm.y, _planetM20[i], _planetM21[i]) + getD(p, i, (int)mm.z, _planetM30[i], _planetM31[i]), _planetMinstr[i].r, i));
                 }
                 return res;
             }
@@ -179,13 +184,13 @@ Shader "Hiddend/RaymarchMain"
 
             
 
-            float3 Shading(float3 p, float3 n, int col)
+            float3 Shading(float3 p, float3 n, int col, int id)
             {
                 float3 result;
                 //Diffuse Color
                 float3 color = (col == 0 )? n : GetCol(p, n, col);
                 
-                float3 lightDirection = normalize(p - _lightOrigin); // pointlight
+                float3 lightDirection = _planetMinstr[id].gba; // pointlight
                 //Directional Light
                 float3 light = (_lightCol * dot(-lightDirection, n) * 0.5 + 0.5) * _lightIntensity;
 
@@ -226,12 +231,12 @@ Shader "Hiddend/RaymarchMain"
 
                     float3 p = ro + (rd * t);
                     //check for hit in distance field
-                    float2 d = map(p);
+                    float3 d = map(p);
                     if (d.x < accuracy && t > _minDistance) // hit something
                     {
                         //shading !
                         float3 n = getNormal(p);
-                        float3 s = Shading(p, n, (int)d.y);
+                        float3 s = Shading(p, n, (int)d.y, (int)d.z);
                         result = fixed4(s,1);
                         break;
                     }
