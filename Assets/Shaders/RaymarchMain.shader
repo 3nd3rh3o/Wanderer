@@ -35,6 +35,7 @@ Shader "Hiddend/RaymarchMain"
             uniform float _lightIntensity;
             uniform float _ShadowIntensity, _ShadowPenumbra;
             uniform float2 _ShadowDistance;
+            uniform float _TangentCorrection;
             
             
             // COMMON
@@ -205,9 +206,16 @@ Shader "Hiddend/RaymarchMain"
             {
                 fixed4 result = fixed4(1,1,1,0);
                 const int max_iteration = _MaxIteration;
+                float accuracy = _Accuracy;
                 float t = 0; // distance travelled along the ray direction
                 for (int i = 0; i < max_iteration; i++)
                 {
+                    // dynamic hit threshold after half it.
+                    if (i >= max_iteration / 2)
+                    {
+                        accuracy += _TangentCorrection;
+                    }
+
                     if (t > _maxDistance || t >= depth)
                     {
                         //Environment
@@ -219,7 +227,7 @@ Shader "Hiddend/RaymarchMain"
                     float3 p = ro + (rd * t);
                     //check for hit in distance field
                     float2 d = map(p);
-                    if (d.x < _Accuracy && t > _minDistance) // hit something
+                    if (d.x < accuracy && t > _minDistance) // hit something
                     {
                         //shading !
                         float3 n = getNormal(p);

@@ -52,6 +52,7 @@ public class RaymarchCamera : SceneViewFilter
     public float _AoIntensity;
     public int _AoIterations;
     public int _MaxPlanets = 10;
+    public float _TangentCorrection = 0f;
     public UniverseDataHolder _dataHolder = new();
 
     private Vector2 _playerLook;
@@ -97,6 +98,8 @@ public class RaymarchCamera : SceneViewFilter
         _rayMarchMaterial.SetFloat("_AoIntensity", _AoIntensity);
         _rayMarchMaterial.SetInt("_AoIterations", _AoIterations);
         _rayMarchMaterial.SetInt("_NumPlanets",_dataHolder.NumElem());
+        _rayMarchMaterial.SetFloat("_TangentCorrection", _TangentCorrection);
+
 
         _rayMarchMat.SetVectorArray("_planetPR", _planetBuffer[0]);
         _rayMarchMat.SetVectorArray("_planetMinstr", _planetBuffer[1]);

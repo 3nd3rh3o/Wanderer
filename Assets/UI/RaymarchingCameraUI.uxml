@@ -4,6 +4,7 @@
         <ui:Foldout text="General" value="false">
             <uie:PropertyField binding-path="_shader" label="Shader" name="shader" />
             <uie:PropertyField name="maxPlanets" binding-path="_MaxPlanets" label="Max planets" />
+            <uie:PropertyField name="tangentCorrection" binding-path="_TangentCorrection" label="Tangent correction" />
             <uie:PropertyField binding-path="_MOUSE" label="mouse" name="mouse" />
             <uie:PropertyField name="move" binding-path="_MOVE" label="move" />
             <uie:PropertyField name="playerPos" binding-path="_playerPos" label="player position" />
