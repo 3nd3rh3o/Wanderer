@@ -1,6 +1,6 @@
 Library/*
 Logs/*
 Temp/*
-Assembly-CSharp.csproj
+*.csproj
 My project.sln
 **/*.meta
