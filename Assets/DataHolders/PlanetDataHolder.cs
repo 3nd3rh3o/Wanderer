@@ -37,6 +37,19 @@ public class PlanetDataHolder
         }
     }
     [SerializeField]
+    private MODIFIERS[] globalHighModifiers = new MODIFIERS[0];
+    public MODIFIERS[] GlobalHighModifiers
+    {
+        get
+        {
+            return globalHighModifiers;
+        }
+        set
+        {
+            globalHighModifiers = value;
+        }
+    }
+
     private MODIFIERS[] globalModifiers = new MODIFIERS[0];
     public MODIFIERS[] GlobalModifiers
     {
@@ -62,6 +75,18 @@ public class PlanetDataHolder
     public Vector4 mParams30;
     [SerializeField]
     public Vector4 mParams31;
+    [SerializeField]
+    public Vector4 mHParams10;
+    [SerializeField]
+    public Vector4 mHParams11;
+    [SerializeField]
+    public Vector4 mHParams20;
+    [SerializeField]
+    public Vector4 mHParams21;
+    [SerializeField]
+    public Vector4 mHParams30;
+    [SerializeField]
+    public Vector4 mHParams31;
 
 
 

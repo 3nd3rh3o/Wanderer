@@ -164,6 +164,7 @@ public class RaymarchCamera : SceneViewFilter
 
     private void OnEnable()
     {
+        //TODO add High modifiers + hParams on all doc to hook to the shader.
         _planetBuffer = new(){new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256]};
         _dataHolder.HookInit();
         // CREATE BUFFER
