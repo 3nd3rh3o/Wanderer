@@ -22,7 +22,7 @@ public class PlanetDataHolder
         }
     }
     [SerializeField]
-    [Range(50, 200)]
+    [Range(0.5f, 30f)]
     private float radius;
     public float Radius
     {

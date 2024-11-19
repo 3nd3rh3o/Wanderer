@@ -30,7 +30,6 @@ Shader "Hiddend/RaymarchMain"
             uniform float _Accuracy, _minDistance, _maxDistance;
             uniform float _AoStepSize, _AoIntensity;
             uniform int _AoIterations;
-            uniform float3 _lightOrigin;
             uniform fixed4 _lightCol;
             uniform float _lightIntensity;
             uniform float _ShadowIntensity, _ShadowPenumbra;
@@ -183,14 +182,14 @@ Shader "Hiddend/RaymarchMain"
             }
 
             
-
+            //TODO ADD LOD HERE
             float3 Shading(float3 p, float3 n, int col, int id)
             {
                 float3 result;
                 //Diffuse Color
                 float3 color = (col == 0 )? n : GetCol(p, n, col);
                 
-                float3 lightDirection = _planetMinstr[id].gba; // pointlight
+                float3 lightDirection = normalize(_planetPR[id].rgb - _planetMinstr[id].gba); // pointlight
                 //Directional Light
                 float3 light = (_lightCol * dot(-lightDirection, n) * 0.5 + 0.5) * _lightIntensity;
 
@@ -209,6 +208,7 @@ Shader "Hiddend/RaymarchMain"
 
             fixed4 raymarching(float3 ro, float3 rd, float depth)
             {
+                //TODO ADD LOD, SHADOWS NOT DRAWN FOR DETAIL ON BIG PLANETS(change shadow params scale?)
                 fixed4 result = fixed4(1,1,1,0);
                 const int max_iteration = _MaxIteration;
                 float accuracy = _Accuracy;

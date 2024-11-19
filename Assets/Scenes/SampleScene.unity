@@ -221,49 +221,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47cf6189a80ac6948a75abfa1adcfeb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 490d5fdbd3575af4796fd0b50f58fadf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shader: {fileID: 4800000, guid: 1b228f6ddaa7a9140ad50fe6d4edac9d, type: 3}
-  _Distance: {x: 14.8, y: 200}
-  _MaxIteration: 50
-  _Accuracy: 0.01
+  _shader: {fileID: 4800000, guid: 0ab91c2fd6607d04988836d75262aa75, type: 3}
+  _Distance: {x: 0.0001, y: 100}
+  _MaxIteration: 100
+  _Accuracy: 0.001
   _lightCol: {r: 1, g: 1, b: 1, a: 1}
   _StarPosition: {x: 0, y: 0, z: 0}
-  _lightIntensity: 0.69
-  _ShadowPenumbra: 1.6
-  _ShadowIntensity: 10.34
-  _ShadowDistance: {x: 1.6, y: 147.7}
-  _AoStepSize: 5.26
-  _AoIntensity: 0.25
+  _lightIntensity: 1.04
+  _ShadowPenumbra: 2.4
+  _ShadowIntensity: 5.07
+  _ShadowDistance: {x: 3, y: 100}
+  _AoStepSize: 2.9
+  _AoIntensity: 0.15
   _AoIterations: 3
   _MaxPlanets: 256
-  _TangentCorrection: 0.04
+  _TangentCorrection: 0.01
   _dataHolder:
     solarSystems:
-    - basePosition: {x: 0, y: 0, z: 0}
+    - basePosition: {x: 0.44, y: 0, z: 0}
       planets:
-      - basePosition: {x: 0, y: 0, z: 68.22}
-        radius: 50
+      - basePosition: {x: 0, y: 0, z: 9.43}
+        radius: 2.4
         globalModifiers: 0100000001000000
-        mParams10: {x: 1.59, y: 300, z: 0.004, w: 0}
+        mParams10: {x: -1.75, y: 2.05, z: 0.08, w: 0}
         mParams11: {x: 0, y: 0, z: 0, w: 0}
-        mParams20: {x: 9.78, y: 1.8, z: 0.33, w: 0}
+        mParams20: {x: 0, y: 46.6, z: 0.01, w: 0}
         mParams21: {x: 0, y: 0, z: 0, w: 0}
         mParams30: {x: 0, y: 0, z: 0, w: 0}
         mParams31: {x: 0, y: 0, z: 0, w: 0}
-      - basePosition: {x: 0, y: 0, z: 215.8}
-        radius: 50
-        globalModifiers: 0100000001000000
-        mParams10: {x: 1.59, y: 400, z: 0.002, w: 0}
-        mParams11: {x: 0, y: 0, z: 0, w: 0}
-        mParams20: {x: 9.78, y: 1.8, z: 1.1, w: 0}
-        mParams21: {x: 0, y: 0, z: 0, w: 0}
-        mParams30: {x: 0, y: 0, z: 0, w: 0}
-        mParams31: {x: 0, y: 0, z: 0, w: 0}
-  _MOUSE: {fileID: 6283500751527008421, guid: 5cc2555199340bb4f8469356f9bbf98e, type: 3}
+  _MOUSE: {fileID: 6283500751527008421, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}
   _playerPos: {x: 0, y: 0, z: 0}
-  _MOVE: {fileID: -4568195256813560329, guid: 5cc2555199340bb4f8469356f9bbf98e, type: 3}
+  _MOVE: {fileID: -4568195256813560329, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
