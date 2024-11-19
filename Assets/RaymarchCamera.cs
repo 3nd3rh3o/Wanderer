@@ -19,7 +19,7 @@ public class RaymarchCamera : SceneViewFilter
     {
         get
         {
-            if (!_rayMarchMat && _shader) 
+            if (!_rayMarchMat && _shader)
             {
                 _rayMarchMat = new Material(_shader);
                 _rayMarchMat.hideFlags = HideFlags.HideAndDontSave;
@@ -42,12 +42,17 @@ public class RaymarchCamera : SceneViewFilter
     public Vector2 _Distance;
     public int _MaxIteration;
     public float _Accuracy;
+
+    public float _HighAccuracy;
+
+    public float _LODThreshold;
     public Color _lightCol;
     public Vector3 _StarPosition;
     public float _lightIntensity;
     public float _ShadowPenumbra;
     public float _ShadowIntensity;
     public Vector2 _ShadowDistance;
+    public Vector2 _HIGHShadowDistance;
     public float _AoStepSize;
     public float _AoIntensity;
     public int _AoIterations;
@@ -59,9 +64,9 @@ public class RaymarchCamera : SceneViewFilter
     public InputActionReference _MOUSE;
     public Vector3 _playerPos = new();
     public InputActionReference _MOVE;
-    
+
     private List<Vector4[]> _planetBuffer;
- 
+
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         if (!_rayMarchMaterial)
@@ -78,25 +83,28 @@ public class RaymarchCamera : SceneViewFilter
             if (_MOVE)
             {
                 Vector2 movement = _MOVE.action.ReadValue<Vector2>();
-                _playerPos = (_playerPos +(_cam.transform.localRotation * new Vector3(movement.x, 0, movement.y)*1f));
+                _playerPos += _cam.transform.localRotation * new Vector3(movement.x, 0, movement.y) * 1f;
             }
         }
-        
+
         _rayMarchMaterial.SetMatrix("_CamFrustum", CamFrustum(_camera));
         _rayMarchMaterial.SetMatrix("_CamToWorld", _camera.cameraToWorldMatrix);
         _rayMarchMaterial.SetFloat("_minDistance", _Distance.x);
-        _rayMarchMaterial.SetFloat("_maxDistance",  _Distance.y);
+        _rayMarchMaterial.SetFloat("_maxDistance", _Distance.y);
         _rayMarchMaterial.SetInt("_MaxIteration", _MaxIteration);
         _rayMarchMaterial.SetFloat("_Accuracy", _Accuracy);
+        _rayMarchMaterial.SetFloat("__HighAccuracy", _HighAccuracy);
+        _rayMarchMaterial.SetFloat("__LODThreshold", _LODThreshold);
         _rayMarchMaterial.SetColor("_lightCol", _lightCol);
         _rayMarchMaterial.SetFloat("_lightIntensity", _lightIntensity);
         _rayMarchMaterial.SetFloat("_ShadowPenumbra", _ShadowPenumbra);
         _rayMarchMaterial.SetFloat("_ShadowIntensity", _ShadowIntensity);
-        _rayMarchMaterial.SetVector("_ShadowDistance", _ShadowDistance); 
+        _rayMarchMaterial.SetVector("_ShadowDistance", _ShadowDistance);
+        _rayMarchMaterial.SetVector("_HIGHShadowDistance", _HIGHShadowDistance);
         _rayMarchMaterial.SetFloat("_AoStepSize", _AoStepSize);
         _rayMarchMaterial.SetFloat("_AoIntensity", _AoIntensity);
         _rayMarchMaterial.SetInt("_AoIterations", _AoIterations);
-        _rayMarchMaterial.SetInt("_NumPlanets",_dataHolder.NumElem());
+        _rayMarchMaterial.SetInt("_NumPlanets", _dataHolder.NumElem());
         _rayMarchMaterial.SetFloat("_TangentCorrection", _TangentCorrection);
 
 
@@ -108,11 +116,18 @@ public class RaymarchCamera : SceneViewFilter
         _rayMarchMat.SetVectorArray("_planetM21", _planetBuffer[5]);
         _rayMarchMat.SetVectorArray("_planetM30", _planetBuffer[6]);
         _rayMarchMat.SetVectorArray("_planetM31", _planetBuffer[7]);
+        _rayMarchMat.SetVectorArray("_planetHighMinstr", _planetBuffer[8]);
+        _rayMarchMat.SetVectorArray("_planetHighM10", _planetBuffer[9]);
+        _rayMarchMat.SetVectorArray("_planetHighM11", _planetBuffer[10]);
+        _rayMarchMat.SetVectorArray("_planetHighM20", _planetBuffer[11]);
+        _rayMarchMat.SetVectorArray("_planetHighM21", _planetBuffer[12]);
+        _rayMarchMat.SetVectorArray("_planetHighM30", _planetBuffer[13]);
+        _rayMarchMat.SetVectorArray("_planetHighM31", _planetBuffer[14]);
 
         RenderTexture.active = destination;
         _rayMarchMaterial.SetTexture("_MainTex", source);
         GL.PushMatrix();
-        GL.LoadOrtho(); 
+        GL.LoadOrtho();
         _rayMarchMaterial.SetPass(0);
         GL.Begin(GL.QUADS);
 
@@ -143,14 +158,14 @@ public class RaymarchCamera : SceneViewFilter
 
 
         Vector3 goUp = Vector3.up * fov;
-        Vector3 goRight = Vector3.right * fov * cam.aspect;
+        Vector3 goRight =  fov * cam.aspect * Vector3.right;
 
 
 
-        Vector3 TL = (-Vector3.forward - goRight + goUp);
-        Vector3 TR = (-Vector3.forward + goRight + goUp);
-        Vector3 BL = (-Vector3.forward - goRight - goUp);
-        Vector3 BR = (-Vector3.forward + goRight - goUp);
+        Vector3 TL = -Vector3.forward - goRight + goUp;
+        Vector3 TR = -Vector3.forward + goRight + goUp;
+        Vector3 BL = -Vector3.forward - goRight - goUp;
+        Vector3 BR = -Vector3.forward + goRight - goUp;
 
         frustum.SetRow(0, TL);
         frustum.SetRow(1, TR);
@@ -159,13 +174,31 @@ public class RaymarchCamera : SceneViewFilter
         return frustum;
     }
 
-    
+
 
 
     private void OnEnable()
     {
-        //TODO add High modifiers + hParams on all doc to hook to the shader.
-        _planetBuffer = new(){new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256], new Vector4[256]};
+        _planetBuffer = new()
+        {
+            //LOW
+            new Vector4[256], // pos.xyz+radius
+            new Vector4[256], // Minstr, lightDirection.xyz
+            new Vector4[256], // M10
+            new Vector4[256], // M11
+            new Vector4[256], // M20
+            new Vector4[256], // M21
+            new Vector4[256], // M30
+            new Vector4[256], // M31
+            //HIGH
+            new Vector4[256], // HMinstr, null.xyz
+            new Vector4[256], // HM10
+            new Vector4[256], // HM11
+            new Vector4[256], // HM20
+            new Vector4[256], // HM21
+            new Vector4[256], // HM30
+            new Vector4[256], // HM31
+        };
         _dataHolder.HookInit();
         // CREATE BUFFER
         UpdateShaderBuffer();
@@ -174,7 +207,7 @@ public class RaymarchCamera : SceneViewFilter
     private void OnDisable()
     {
         _dataHolder.HookClean();
-        _planetBuffer=null;
+        _planetBuffer = null;
     }
 
 
@@ -189,6 +222,15 @@ public class RaymarchCamera : SceneViewFilter
         Vector4[] mArgs21 = _planetBuffer[5];
         Vector4[] mArgs30 = _planetBuffer[6];
         Vector4[] mArgs31 = _planetBuffer[7];
+        Vector4[] Hmodifiers = _planetBuffer[8];
+        Vector4[] HmArgs10 = _planetBuffer[9];
+        Vector4[] HmArgs11 = _planetBuffer[10];
+        Vector4[] HmArgs20 = _planetBuffer[11];
+        Vector4[] HmArgs21 = _planetBuffer[12];
+        Vector4[] HmArgs30 = _planetBuffer[13];
+        Vector4[] HmArgs31 = _planetBuffer[14];
+
+
         for (int i = 0; i < _dataHolder.NumElem(); i++)
         {
             Vector4 pr = pData[i][0];
@@ -200,6 +242,13 @@ public class RaymarchCamera : SceneViewFilter
             mArgs21[i] = pData[i][5];
             mArgs30[i] = pData[i][6];
             mArgs31[i] = pData[i][7];
+            Hmodifiers[i] = new Vector4(pData[i][8].x, 0, 0, 0);
+            HmArgs10[i] = pData[i][9];
+            HmArgs11[i] = pData[i][10];
+            HmArgs20[i] = pData[i][11];
+            HmArgs21[i] = pData[i][12];
+            HmArgs30[i] = pData[i][13];
+            HmArgs31[i] = pData[i][14];
         }
         _planetBuffer[0] = pos;
         _planetBuffer[1] = modifiers;
@@ -209,6 +258,13 @@ public class RaymarchCamera : SceneViewFilter
         _planetBuffer[5] = mArgs21;
         _planetBuffer[6] = mArgs30;
         _planetBuffer[7] = mArgs31;
+        _planetBuffer[8] = Hmodifiers;
+        _planetBuffer[9] = HmArgs10;
+        _planetBuffer[10] = HmArgs11;
+        _planetBuffer[11] = HmArgs20;
+        _planetBuffer[12] = HmArgs21;
+        _planetBuffer[13] = HmArgs30;
+        _planetBuffer[14] = HmArgs31;
         _dataHolder.UnmarkDirty();
     }
 }

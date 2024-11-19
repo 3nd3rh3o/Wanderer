@@ -38,15 +38,21 @@ public class SolarSystemDataHolder
 
             pData[i] = new()
             {
-                new Vector4(pos.x, pos.y, pos.z, planets[i].Radius), 
-                //FIXME star pos error here !
+                new Vector4(pos.x, pos.y, pos.z, planets[i].Radius),
                 new Vector4(PlanetDataHolder.ToInstr(planets[i].GlobalModifiers), sPos.x, sPos.y, sPos.z),
                 planets[i].mParams10,
                 planets[i].mParams11,
                 planets[i].mParams20,
                 planets[i].mParams21,
                 planets[i].mParams30,
-                planets[i].mParams31
+                planets[i].mParams31,
+                new Vector4(PlanetDataHolder.ToInstr(planets[i].GlobalHighModifiers), 0, 0, 0),
+                planets[i].mHParams10,
+                planets[i].mHParams11,
+                planets[i].mHParams20,
+                planets[i].mHParams21,
+                planets[i].mHParams30,
+                planets[i].mHParams31
             };
 
         }
@@ -64,7 +70,6 @@ public class SolarSystemDataHolder
         planets.ForEach(p => 
         {
             p.OnChange = TOnChange;
-            //TODO hook init for moons 
         });
     }
 

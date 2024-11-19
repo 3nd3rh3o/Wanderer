@@ -259,7 +259,7 @@ Shader "Hiddend/RaymarchMain"
                 float3 light = (_lightCol * dot(-lightDirection, n) * 0.5 + 0.5) * _lightIntensity;
 
                 //Shadows
-                float shadow = softShadows(p, -lightDirection, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra, mode) * 0.5 + 0.5;
+                float shadow = mode==0?softShadows(p, -lightDirection, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra, mode) * 0.5 + 0.5 : softShadows(p, -lightDirection, _HIGHShadowDistance.x, _HIGHShadowDistance.y, _ShadowPenumbra, mode) * 0.5 + 0.5;
                 shadow = max(0.0, pow(shadow, _ShadowIntensity));
 
                 //Ambient Occlusion

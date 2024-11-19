@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-[System.Serializable]
+[Serializable]
 public class PlanetDataHolder
 {
     public Action OnChange;

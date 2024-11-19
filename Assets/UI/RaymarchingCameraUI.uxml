@@ -9,8 +9,11 @@
             <uie:PropertyField name="move" binding-path="_MOVE" label="move" />
             <uie:PropertyField name="playerPos" binding-path="_playerPos" label="player position" />
             <uie:PropertyField name="Distance" label="Distance" binding-path="_Distance" />
+            <uie:PropertyField name="Distance" label="Distance" binding-path="_Distance" />
             <uie:PropertyField name="maxIterations" binding-path="_MaxIteration" label="Max iterations" />
             <uie:PropertyField name="Accuracy" binding-path="_Accuracy" label="Accuracy" />
+            <uie:PropertyField name="HighAccuracy" binding-path="_HighAccuracy" label="High accuracy" />
+            <uie:PropertyField name="LODThreshold" binding-path="_LODThreshold" label="LOD Threshold" />
             <ui:Foldout text="Light" name="Light" value="false">
                 <uie:PropertyField label="light color" binding-path="_lightCol" name="lightCol" />
                 <uie:PropertyField name="lightIntensity" binding-path="_lightIntensity" label="Light intensity" />
@@ -20,6 +23,7 @@
                 <uie:PropertyField name="ShadowPenumbra" binding-path="_ShadowPenumbra" label="Shadow penumbra" />
                 <uie:PropertyField name="ShadowIntensity" binding-path="_ShadowIntensity" label="Shadow intensity" />
                 <uie:PropertyField name="ShadowDistance" binding-path="_ShadowDistance" label="Shadow distance" />
+                <uie:PropertyField name="HIGHShadowDistance" binding-path="_HIGHShadowDistance" label="High Shadow distance" />
             </ui:Foldout>
             <ui:Foldout text="Ambient Occlusion" name="AmbientOcclusion" value="false">
                 <uie:PropertyField name="_AoStepSize" binding-path="_AoStepSize" label="Step size" />
