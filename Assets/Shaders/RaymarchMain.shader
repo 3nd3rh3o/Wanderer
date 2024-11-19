@@ -152,7 +152,7 @@ Shader "Hiddend/RaymarchMain"
                 fixed4 M31;
                 if (mode == 0)
                 {
-                    m = (int)_planetMinstr[0].r
+                    m = (int)_planetMinstr[0].r;
                     mm = unPackModifiers((int)_planetMinstr[0].r);
                     M10 = _planetM10[0];
                     M11 = _planetM11[0];
@@ -163,7 +163,7 @@ Shader "Hiddend/RaymarchMain"
                 }
                 else
                 {
-                    m = (int)_planetHighMinstr[0].r
+                    m = (int)_planetHighMinstr[0].r;
                     mm = unPackModifiers((int)_planetHighMinstr[0].r);
                     M10 = _planetHighM10[0];
                     M11 = _planetHighM11[0];
@@ -172,12 +172,12 @@ Shader "Hiddend/RaymarchMain"
                     M30 = _planetHighM30[0];
                     M31 = _planetHighM31[0];
                 }
-                float3 res = float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p, 0, (int)mm.x, M10, M11) + getD(p, 0, (int)mm.y, M20, M21) + getD(p, 0, (int)mm.z, M30, M31), m, 0);
+                float3 res = float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p - pPR.rgb, 0, (int)mm.x, M10, M11) + getD(p - pPR.rgb, 0, (int)mm.y, M20, M21) + getD(p - pPR.rgb, 0, (int)mm.z, M30, M31), m, 0);
                 for (int i = 0; i < _NumPlanets; i++)
                 {
                     if (mode == 0)
                     {
-                        m = (int)_planetMinstr[0].r
+                        m = (int)_planetMinstr[0].r;
                         mm = unPackModifiers((int)_planetMinstr[0].r);
                         M10 = _planetM10[0];
                         M11 = _planetM11[0];
@@ -188,7 +188,7 @@ Shader "Hiddend/RaymarchMain"
                     }
                     else
                     {
-                        m = (int)_planetHighMinstr[i].r
+                        m = (int)_planetHighMinstr[i].r;
                         mm = unPackModifiers((int)_planetHighMinstr[i].r);
                         M10 = _planetHighM10[i];
                         M11 = _planetHighM11[i];
@@ -198,7 +198,11 @@ Shader "Hiddend/RaymarchMain"
                         M31 = _planetHighM31[i];
                     }
                     pPR = _planetPR[i];
-                    res = opU(res, float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p, i, (int)mm.x, M10, M11) + getD(p, 1, (int)mm.y, M20, M21) + getD(p, i, (int)mm.z, M30, M31), m, i));
+                    res = opU(res, float3(sdSphere(p - pPR.rgb, pPR.a) + getD(p - pPR.rgb, i, (int)mm.x, M10, M11) + getD(p - pPR.rgb, 1, (int)mm.y, M20, M21) + getD(p - pPR.rgb, i, (int)mm.z, M30, M31), m, i));
+                }
+                if (mode == 0)
+                {
+                    res[0] = opS(sdSphere(p, _maxDistance * _LODThreshold), res.x);
                 }
                 return res;
             }
@@ -304,7 +308,7 @@ Shader "Hiddend/RaymarchMain"
                     {
                         //HIGH RES VOL
                         d = map(p, 1);
-                        if (d.x < accuracy && length(p) > _minDistance)
+                        if (d.x < hAccuracy && length(p) > _minDistance)
                         {
                             float3 n = getNormal(p, 1);
                             float3 s = Shading(p, n, (int)d.y, (int)d.z, 1);

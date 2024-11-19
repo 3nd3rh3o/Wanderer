@@ -225,33 +225,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shader: {fileID: 4800000, guid: 0ab91c2fd6607d04988836d75262aa75, type: 3}
-  _Distance: {x: 0.0001, y: 100}
+  _Distance: {x: 0, y: 1000}
   _MaxIteration: 100
-  _Accuracy: 0.001
+  _Accuracy: 0.1
+  _HighAccuracy: 0.000001
+  _LODThreshold: 0.02
   _lightCol: {r: 1, g: 1, b: 1, a: 1}
   _StarPosition: {x: 0, y: 0, z: 0}
-  _lightIntensity: 1.04
-  _ShadowPenumbra: 2.4
+  _lightIntensity: 1.05
+  _ShadowPenumbra: 1.54
   _ShadowIntensity: 5.07
-  _ShadowDistance: {x: 3, y: 100}
-  _AoStepSize: 2.9
-  _AoIntensity: 0.15
+  _ShadowDistance: {x: 6.78, y: 100}
+  _HIGHShadowDistance: {x: 2.58, y: 43.93}
+  _AoStepSize: 1.22
+  _AoIntensity: 0.09
   _AoIterations: 3
   _MaxPlanets: 256
-  _TangentCorrection: 0.01
+  _TangentCorrection: 0.00001
   _dataHolder:
     solarSystems:
-    - basePosition: {x: 0.44, y: 0, z: 0}
+    - basePosition: {x: 0.44, y: -44.1, z: 16.11}
       planets:
-      - basePosition: {x: 0, y: 0, z: 9.43}
-        radius: 2.4
-        globalModifiers: 0100000001000000
-        mParams10: {x: -1.75, y: 2.05, z: 0.08, w: 0}
+      - basePosition: {x: 0, y: 45, z: 63}
+        radius: 17.4
+        globalHighModifiers: 0100000001000000
+        globalModifiers: 01000000
+        mParams10: {x: 0, y: 6.37, z: 0.64, w: 0}
         mParams11: {x: 0, y: 0, z: 0, w: 0}
         mParams20: {x: 0, y: 46.6, z: 0.01, w: 0}
         mParams21: {x: 0, y: 0, z: 0, w: 0}
         mParams30: {x: 0, y: 0, z: 0, w: 0}
         mParams31: {x: 0, y: 0, z: 0, w: 0}
+        mHParams10: {x: 0, y: 6.37, z: 0.64, w: 0}
+        mHParams11: {x: 0, y: 0, z: 0, w: 0}
+        mHParams20: {x: 0, y: 25.3, z: 0.06, w: 0}
+        mHParams21: {x: 0, y: 0, z: 0, w: 0}
+        mHParams30: {x: 0, y: 0, z: 0, w: 0}
+        mHParams31: {x: 0, y: 0, z: 0, w: 0}
   _MOUSE: {fileID: 6283500751527008421, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}
   _playerPos: {x: 0, y: 0, z: 0}
   _MOVE: {fileID: -4568195256813560329, guid: 6f547de9aa5fdfd4486c561434d90d83, type: 3}

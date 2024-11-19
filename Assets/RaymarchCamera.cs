@@ -93,8 +93,8 @@ public class RaymarchCamera : SceneViewFilter
         _rayMarchMaterial.SetFloat("_maxDistance", _Distance.y);
         _rayMarchMaterial.SetInt("_MaxIteration", _MaxIteration);
         _rayMarchMaterial.SetFloat("_Accuracy", _Accuracy);
-        _rayMarchMaterial.SetFloat("__HighAccuracy", _HighAccuracy);
-        _rayMarchMaterial.SetFloat("__LODThreshold", _LODThreshold);
+        _rayMarchMaterial.SetFloat("_HighAccuracy", _HighAccuracy);
+        _rayMarchMaterial.SetFloat("_LODThreshold", _LODThreshold);
         _rayMarchMaterial.SetColor("_lightCol", _lightCol);
         _rayMarchMaterial.SetFloat("_lightIntensity", _lightIntensity);
         _rayMarchMaterial.SetFloat("_ShadowPenumbra", _ShadowPenumbra);

@@ -47,7 +47,7 @@ public class PlanetDataHolder
             globalHighModifiers = value;
         }
     }
-
+    [SerializeField]
     private MODIFIERS[] globalModifiers = new MODIFIERS[0];
     public MODIFIERS[] GlobalModifiers
     {
